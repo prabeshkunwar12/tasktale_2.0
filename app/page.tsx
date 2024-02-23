@@ -1,7 +1,7 @@
 import Image from "next/image";
-import MaxWidthWrapper from "./components/max_width_wrapper";
+import MaxWidthWrapper from "../components/max_width_wrapper";
 import Link from "next/link";
-import { ArrowRight } from "lucide";
+import { ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
