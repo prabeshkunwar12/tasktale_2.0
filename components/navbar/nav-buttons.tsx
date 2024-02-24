@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { BookNowButton, TasksButton } from './buttons'
-import LoginButton from '../auth/login-button'
+import LoginButton from '../auth/buttons/login-button'
 import { Button } from '../ui/button'
 
 const NavButtons = () => {
