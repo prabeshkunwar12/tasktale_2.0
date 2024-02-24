@@ -1,8 +1,9 @@
 'use server'
 
-import { getUserByEmail } from "@/lib/data/user"
+import { signIn } from "@/auth"
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { LoginSchema } from "@/schemas"
-import bcrypt from 'bcryptjs'
+import { AuthError } from "next-auth"
 import * as z from 'zod'
 
 export const login = async (values:z.infer<typeof LoginSchema>) => {
@@ -14,13 +15,20 @@ export const login = async (values:z.infer<typeof LoginSchema>) => {
 
     const { email, password } = validatedFields.data
 
-    const existingUser = await getUserByEmail(email)
+    try {
+        await signIn("credentials", {
+            email,
+            password,
+            redirectTo: DEFAULT_LOGIN_REDIRECT
+        })
+    } catch(error) {
+        if(error instanceof AuthError) {
+            if(error.type === "CredentialsSignin") return { error: "Invalid Credentials!"}
+            return { error: "Something went worng!"}
+        }
 
-    if(!existingUser ?? existingUser?.password) {
-        return {error: "Invalid credentials!"}
+        throw error
     }
-
-    const passwordMatch = bcrypt.compare(password, existingUser?.password as string)
 
     return {success: "Email Sent"}
 }
