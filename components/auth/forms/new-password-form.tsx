@@ -1,44 +1,50 @@
 "use client"
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState, useTransition } from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 import { CardWrapper } from '../wrappers/card-wrapper'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { FormError, FormSuccess } from './info'
 import { Button } from '@/components/ui/button'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { ResetSchema } from '@/schemas'
-import { reset } from '@/actions/reset'
+import { NewPasswordSchema } from '@/schemas'
+import { newPassword } from '@/actions/new-password'
 
-const ResetForm = () => {
-    const [isPending, startTransistion]  = useTransition()
-    const [error, setError] = useState<string|undefined>("")
-    const [success, setSuccess] = useState<string|undefined>("")
+const NewPasswordForm = () => {
+    const searchParams = useSearchParams()
+    const token = searchParams.get("token")
+    const [isPending, startTransistion]  = useTransition();
+    const [error, setError] = useState<string|undefined>("");
+    const [success, setSuccess] = useState<string|undefined>("");
+    const router = useRouter()
 
-    const form = useForm<z.infer<typeof ResetSchema>>({
-        resolver: zodResolver(ResetSchema),
+    const form = useForm<z.infer<typeof NewPasswordSchema>>({
+        resolver: zodResolver(NewPasswordSchema),
         defaultValues: {
-            email: "",
+            password: "",
         }
     })
 
-    const onSubmit = (values: z.infer<typeof ResetSchema>) => {
+    const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
         setError("")
         setSuccess("")
 
+        console.log(values)
+
         startTransistion(()=>{
-            reset(values).then((data)=>{
-                setError(data?.error)
-                setSuccess(data?.success)
+            newPassword(values, token).then((data)=>{
+                setError(data?.error);
+                setSuccess(data?.success);
             })
         })
     }
 
     return (
         <CardWrapper
-            headerLabel='Forgot your Password?'
+            headerLabel='Enter a New Password'
             backButtonLabel="Back to Login"
             backButtonHref='/login'
         >
@@ -50,16 +56,16 @@ const ResetForm = () => {
                     <div className='space-y-4'>
                         <FormField 
                             control={form.control}
-                            name="email"
+                            name="password"
                             render={({field})=>(
                                 <FormItem>
-                                    <FormLabel className='text-xl text-black'>Email</FormLabel>
+                                    <FormLabel className='text-xl text-black'>New Password</FormLabel>
                                     <FormControl>
                                         <Input 
                                             {...field}
                                             disabled={isPending}
-                                            placeholder='john.doe@example.com'
-                                            type="email"
+                                            placeholder='********'
+                                            type="password"
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -67,10 +73,10 @@ const ResetForm = () => {
                             )}
                         />
                     </div>
-                    <FormError   message={error} />
+                    <FormError message={error} />
                     <FormSuccess message={success} />
                     <Button disabled={isPending} type='submit' className='w-full'>
-                        Send Reset Email
+                        Reset Password
                     </Button>
                 </form>
             </Form>
@@ -78,4 +84,4 @@ const ResetForm = () => {
     )
 }
 
-export default ResetForm
+export default NewPasswordForm
