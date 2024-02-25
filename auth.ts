@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter"
 import db from "./lib/db"
 import { getUserById } from "./lib/data/user"
 import { UserRole } from "@prisma/client"
+import { getTwoFactorConfirmationByUserId } from "./lib/data/two-factor-confirmation"
 
 //any new fields to add in the user session
 export type ExtendedUser = DefaultSession["user"] & {
@@ -38,7 +39,18 @@ export const {
       //prevent sign in without email verification
       if(!existingUser?.emailVerified) return false
 
-      //TODO add 2FA check
+      if(existingUser?.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser?.id)
+
+        if(!twoFactorConfirmation) return false
+
+        //delete two factor authentication for login
+        await db.twoFactorConfirmation.delete({
+          where: {id: twoFactorConfirmation.id}
+        })
+
+        return true
+      }
       
       return true
     },
