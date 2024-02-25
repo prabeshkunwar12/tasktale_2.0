@@ -12,11 +12,15 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { FormError, FormSuccess } from './info'
 import { login } from '@/actions/login'
+import { useSearchParams } from 'next/navigation'
 
 const LoginForm = () => {
     const [isPending, startTransistion] = useTransition()
     const [error, setError] = useState<string|undefined>()
     const [success, setSuccess] = useState<string|undefined>()
+
+    const searchParams = useSearchParams()
+    const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email Already in use with different provider!":""
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
@@ -94,7 +98,7 @@ const LoginForm = () => {
                     )}
                 />
                 </div>
-                <FormError message= {error} />
+                <FormError message= {error ?? urlError} />
                 <FormSuccess message= {success} />
                 <Button type='submit' className='w-full' disabled={isPending}>
                     Login

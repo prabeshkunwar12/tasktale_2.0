@@ -5,6 +5,7 @@ import db from "./lib/db"
 import { getUserById } from "./lib/data/user"
 import { UserRole } from "@prisma/client"
 
+//any new fields to add in the user session
 export type ExtendedUser = DefaultSession["user"] & {
   role: UserRole
 }
@@ -21,6 +22,10 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  pages: {
+    signIn: "/login",
+    error: "/error"
+  },
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   callbacks: {
@@ -43,6 +48,14 @@ export const {
         session.user.role = token.role as UserRole
       }
       return session
+    }
+  },
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() }
+      })
     }
   },
   ...authConfig,
