@@ -23,3 +23,7 @@ export const RegisterSchema = z.object({
     email: z.string().min(1, "Email is required!").max(100, "email can only have 100 characters").email(),
     password: passwordSchema
 })  
+
+export const ResetSchema = z.object({
+    email: z.string().min(1, "email is required").email(),
+});
