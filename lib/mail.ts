@@ -1,7 +1,7 @@
 import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const url = process.env.URL
+const url = process.env.RESEND_URL
 const sender = "mail@tasktale.com"
 
 export const sendTwoFactorTokenEmail = async (

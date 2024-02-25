@@ -2,7 +2,7 @@
 
 import { signIn } from "@/auth"
 import { getUserByEmail } from "@/lib/data/user"
-import { getVerificationTokenByEmail } from "@/lib/data/verification-token"
+import { sendVerificationEmail } from "@/lib/mail"
 import { generateVerificationToken } from "@/lib/token"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { LoginSchema } from "@/schemas"
@@ -27,6 +27,9 @@ export const login = async (values:z.infer<typeof LoginSchema>) => {
     //also has similar auth callback if user can bypass this check 
     if(!existingUser.emailVerified) {
         const verificationToken = await generateVerificationToken(existingUser.email as string)
+
+        await sendVerificationEmail(verificationToken.email, verificationToken.token)
+
         return { success: "Confirmation Email Sent"}
     }
 
