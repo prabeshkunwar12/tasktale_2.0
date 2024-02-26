@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import { buttonVariants } from "../button"
+import { buttonVariants } from "../ui/button"
 
 export const BookNowButton = () => {
     return (
