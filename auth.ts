@@ -1,14 +1,16 @@
-import NextAuth, { DefaultSession } from "next-auth"
-import authConfig from "./auth.config"
+import NextAuth, {type DefaultSession } from "next-auth"
+import authConfig from "@/auth.config"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import db from "./lib/db"
-import { getUserById } from "./lib/data/user"
+import db from "@/lib/db"
+import { getUserById } from "@/lib/data/user"
 import { UserRole } from "@prisma/client"
-import { getTwoFactorConfirmationByUserId } from "./lib/data/two-factor-confirmation"
+import { getTwoFactorConfirmationByUserId } from "@/lib/data/two-factor-confirmation"
 
 //any new fields to add in the user session
 export type ExtendedUser = DefaultSession["user"] & {
   role: UserRole
+  isTwoFactorEnabled: boolean
+  isOauth: boolean
 }
 
 declare module "next-auth" {
@@ -84,6 +86,5 @@ export const {
       })
     }
   },
-  trustHost:true,
   ...authConfig,
 })
