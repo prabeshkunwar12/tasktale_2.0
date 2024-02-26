@@ -84,5 +84,6 @@ export const {
       })
     }
   },
+  trustHost:true,
   ...authConfig,
 })
