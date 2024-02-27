@@ -20,10 +20,14 @@ model User {
   emailVerified         DateTime?
   image                 String?
   password              String?
+
   role                  UserRole               @default(USER)
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  
+  consumerTasks Task[] @relation("ConsumerTasks")
+  taskerTasks   Task[] @relation("TaskerTasks")
 }
 
 enum UserRole {
@@ -79,9 +83,58 @@ model TwoFactorToken {
 }
 
 model TwoFactorConfirmation {
-  id      String   @id @default(cuid())
-  userId  String
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+enum UploadStatus {
+  PENDING
+  PROCESSING
+  FAILED
+  SUCCESS
+}
+
+model TaskImage {
+  id String @id @default(cuid())
+  name String
+  taskId String
+
+  uploadStatus UploadStatus @default(PENDING)
+
+  url String
+  key String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Task Task @relation(fields: [taskId], references: [id])
+}
+
+enum TaskStatus {
+  SUBMITTING
+  POSTED
+  FAILED
+  ACCPTED
+  PAID
+  COMPLETED
+  RATED
+}
+
+model Task {
+  id String @id @default(cuid())
+  description String
+  type String
+
+  consumerId String
+  taskerId String?
+
+  images TaskImage[]
+
+  status TaskStatus @default(SUBMITTING)
+
+  Consumer User @relation(name: "ConsumerTasks", fields: [consumerId], references: [id])
+  Tasker User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id])
 }
