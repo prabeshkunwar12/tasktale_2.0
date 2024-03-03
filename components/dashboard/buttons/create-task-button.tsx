@@ -10,7 +10,7 @@ const CreateTaskButton = () => {
     return (
         <Dialog open={isOpen} onOpenChange={(v) => {if(!v) setIsOpen(v)}}>
             <DialogTrigger onClick={() => setIsOpen(true)} asChild>
-                <Button>Create Task</Button>
+                <Button>Book a New Task</Button>
             </DialogTrigger>
 
             <DialogContent>

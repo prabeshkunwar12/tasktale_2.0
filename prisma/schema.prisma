@@ -14,18 +14,18 @@ datasource db {
 // }
 
 model User {
-  id                    String                 @id @default(cuid())
-  name                  String?
-  email                 String?                @unique
-  emailVerified         DateTime?
-  image                 String?
-  password              String?
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
 
   role                  UserRole               @default(USER)
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
-  
+
   consumerTasks Task[] @relation("ConsumerTasks")
   taskerTasks   Task[] @relation("TaskerTasks")
 }
@@ -98,8 +98,8 @@ enum UploadStatus {
 }
 
 model TaskImage {
-  id String @id @default(cuid())
-  name String
+  id     String @id @default(cuid())
+  name   String
   taskId String
 
   uploadStatus UploadStatus @default(PENDING)
@@ -124,17 +124,20 @@ enum TaskStatus {
 }
 
 model Task {
-  id String @id @default(cuid())
+  id          String @id @default(cuid())
   description String
-  type String
+  type        String
 
   consumerId String
-  taskerId String?
+  taskerId   String?
 
   images TaskImage[]
 
   status TaskStatus @default(SUBMITTING)
 
-  Consumer User @relation(name: "ConsumerTasks", fields: [consumerId], references: [id])
-  Tasker User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Consumer User  @relation(name: "ConsumerTasks", fields: [consumerId], references: [id])
+  Tasker   User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id])
 }
