@@ -1,13 +1,9 @@
 "use client"
 
 import { trpc } from '@/app/_trpc/client'
-import { format } from 'date-fns'
 import { BookOpen, Plus, Star, UserCircle } from 'lucide-react'
-import Link from 'next/link'
 import React, { useEffect, useTransition } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card'
-import Image from 'next/image'
 import TaskCard from './cards/task-card'
 
 const TaskList = () => {
