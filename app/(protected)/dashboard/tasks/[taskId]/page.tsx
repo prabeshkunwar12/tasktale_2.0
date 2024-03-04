@@ -9,9 +9,12 @@ interface PageProps {
 const TaskPage = ({ params }:PageProps) => {
     const { taskId } = params
     return (
-        <div>
-            {taskId}
-        </div>
+        <>
+            <h1>Task</h1>
+            <div>
+                {taskId}
+            </div>
+        </>
     )
 }
 

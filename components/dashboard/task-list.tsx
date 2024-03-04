@@ -11,7 +11,7 @@ const TaskList = () => {
     return (
         <div>
             { tasks && tasks?.length !== 0 ? (
-                <ul className=' mt-8 mx-5 grid grid-cols-1 gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3'>
+                <ul className=' mt-8 mx-5 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
                     {tasks.sort(
                         (a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                     ).map((task) => (
@@ -21,10 +21,12 @@ const TaskList = () => {
                                 type={task.type}
                                 status={task.status}
                                 description={task.description}
+                                location={task.location ?? 'Remote'}
                                 tasker_name='John Doe'
                                 tasker_pos='Cleaner'
-                                date={task.createdAt}
-                                price='100'
+                                date={task.taskDateTime ?? task.createdAt}
+                                price={task.price}
+                                stars={task.rating}
                             /> 
                         </li>
                     ))}

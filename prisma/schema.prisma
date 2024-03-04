@@ -124,9 +124,12 @@ enum TaskStatus {
 }
 
 model Task {
-  id          String @id @default(cuid())
+  id          String   @id @default(cuid())
   description String
   type        String
+  rating      Int?
+  price       Decimal? @db.Decimal
+  location    String?
 
   consumerId String
   taskerId   String?
@@ -135,8 +138,14 @@ model Task {
 
   status TaskStatus @default(SUBMITTING)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  taskDateTime      DateTime?
+  postedDateTime    DateTime?
+  acceptedDateTime  DateTime?
+  paidDateTime      DateTime?
+  completedDateTime DateTime?
+  ratedDateTime     DateTime?
 
   Consumer User  @relation(name: "ConsumerTasks", fields: [consumerId], references: [id])
   Tasker   User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id])
