@@ -1,17 +1,16 @@
 "use client"
 
 import { trpc } from '@/app/_trpc/client'
-import { BookOpen, Plus, Star, UserCircle } from 'lucide-react'
-import React, { useEffect, useTransition } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import TaskCard from './cards/task-card'
+import { ScrollArea } from '../ui/scroll-area'
 
 const TaskList = () => {
     const {data:tasks, isLoading} = trpc.getConsumerTasks.useQuery();
     return (
-        <div>
+        <ScrollArea className='mt-8 bg-white/50 h-[550px] rounded-md border sm:mx-3'>
             { tasks && tasks?.length !== 0 ? (
-                <ul className=' mt-8 mx-5 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+                <ul className=' mt-2 mx-5 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
                     {tasks.sort(
                         (a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                     ).map((task) => (
@@ -41,7 +40,7 @@ const TaskList = () => {
                 </div>
             )}
 
-        </div>
+        </ScrollArea>
     )
 }
 
