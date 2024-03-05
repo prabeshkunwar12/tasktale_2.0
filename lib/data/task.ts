@@ -27,6 +27,19 @@ export const getTasksByConsumerId = async (id:string) => {
     }
 }
 
+export const getTaskByTaskId = async (taskId:string) => {
+    try {
+        const task = await db.task.findFirst({
+            where: {
+                id: taskId,
+            }
+        })
+        return task
+    } catch {
+        return null
+    }
+}
+
 export const getImagesByTaskId = async (id:string) => {
     try {
         const images = await db.taskImage.findMany({

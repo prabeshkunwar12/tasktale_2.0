@@ -4,6 +4,7 @@ import { trpc } from '@/app/_trpc/client'
 import Skeleton from 'react-loading-skeleton'
 import TaskCard from './cards/task-card'
 import { ScrollArea } from '../ui/scroll-area'
+import { BookOpen } from 'lucide-react'
 
 const TaskList = () => {
     const {data:tasks, isLoading} = trpc.getConsumerTasks.useQuery();
