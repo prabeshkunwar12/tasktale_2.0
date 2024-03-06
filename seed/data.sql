@@ -1,0 +1,55 @@
+-- Active: 1709748428328@@127.0.0.1@5432@tasktale_2.0
+-- Insert TaskType records
+INSERT INTO "TaskType" (name)
+VALUES
+  ('Cleaning'),
+  ('Transportation'),
+  ('Shopping'),
+  ('Beauty Procedures'),
+  ('Household Maintenance'),
+  ('Pet Care'),
+  ('Yard Work'),
+  ('Technical Assistance'),
+  ('Event Services'),
+  ('Other');
+
+-- Insert TaskSubTypes records
+INSERT INTO "TaskSubTypes" (name, "taskTypeName")
+VALUES
+  ('House Cleaning', 'Cleaning'),
+  ('Car Cleaning', 'Cleaning'),
+  ('Room Cleaning', 'Cleaning'),
+  ('Deep Cleaning', 'Cleaning'),
+  ('Other Cleaning Tasks', 'Cleaning'),
+  ('Ride', 'Transportation'),
+  ('Delivery', 'Transportation'),
+  ('Other Transportation Tasks', 'Transportation'),
+  ('Grocery Shopping', 'Shopping'),
+  ('Personal Shopping', 'Shopping'),
+  ('Gift Shopping', 'Shopping'),
+  ('Other Shopping Tasks', 'Shopping'),
+  ('Haircut', 'Beauty Procedures'),
+  ('Makeup', 'Beauty Procedures'),
+  ('Manicures', 'Beauty Procedures'),
+  ('Pedicures', 'Beauty Procedures'),
+  ('Other Beauty Procedures', 'Beauty Procedures'),
+  ('Repairs', 'Household Maintenance'),
+  ('Assembly', 'Household Maintenance'),
+  ('Painting', 'Household Maintenance'),
+  ('Other Maintenance Tasks', 'Household Maintenance'),
+  ('Dog Walking', 'Pet Care'),
+  ('Pet Sitting', 'Pet Care'),
+  ('Grooming', 'Pet Care'),
+  ('Other Pet Care Tasks', 'Pet Care'),
+  ('Lawn Mowing', 'Yard Work'),
+  ('Gardening', 'Yard Work'),
+  ('Snow Removal', 'Yard Work'),
+  ('Other Yard Work Tasks', 'Yard Work'),
+  ('Computer Help', 'Technical Assistance'),
+  ('Tech Support', 'Technical Assistance'),
+  ('Setup/Installation', 'Technical Assistance'),
+  ('Other Technical Tasks', 'Technical Assistance'),
+  ('Party Planning', 'Event Services'),
+  ('Catering', 'Event Services'),
+  ('Photography', 'Event Services'),
+  ('Other Event Services', 'Event Services');

@@ -123,10 +123,26 @@ enum TaskStatus {
   RATED
 }
 
+model TaskSubTypes {
+  name         String
+  taskTypeName String
+  taskType TaskType @relation(fields: [taskTypeName], references: [name])
+  tasks Task[]
+
+  @@unique([name, taskTypeName])
+}
+
+model TaskType {
+  name     String
+  subTypes TaskSubTypes[]
+  @@unique([name])
+}
+
 model Task {
   id          String   @id @default(cuid())
   description String
   type        String
+  subTypeName String
   rating      Int?
   price       Decimal? @db.Decimal
   location    String?
@@ -149,4 +165,5 @@ model Task {
 
   Consumer User  @relation(name: "ConsumerTasks", fields: [consumerId], references: [id])
   Tasker   User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id])
+  SubType TaskSubTypes @relation(fields: [subTypeName, type], references: [name, taskTypeName])
 }

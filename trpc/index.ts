@@ -26,7 +26,7 @@ export const appRouter = router({
       throw new TRPCError({code : "NOT_FOUND"})
     }
 
-    if(task.consumerId !== userId || user.role !== $Enums.UserRole.ADMIN) {
+    if(task.consumerId !== userId && user.role !== $Enums.UserRole.ADMIN) {
       throw new TRPCError({code: "UNAUTHORIZED"})
     }
     
