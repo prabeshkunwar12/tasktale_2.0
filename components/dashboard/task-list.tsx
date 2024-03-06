@@ -18,7 +18,7 @@ const TaskList = () => {
                         <li key={task.id} className='col-span-1 divide-y divide-gray-200 rounded-lg'>
                             <TaskCard 
                                 id={task.id} 
-                                type={task.type}
+                                type={task.subTypeName}
                                 status={task.status}
                                 description={task.description}
                                 location={task.location ?? 'Remote'}

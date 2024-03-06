@@ -135,13 +135,15 @@ model TaskSubTypes {
 model TaskType {
   name     String
   subTypes TaskSubTypes[]
+  task Task[]
+
   @@unique([name])
 }
 
 model Task {
   id          String   @id @default(cuid())
   description String
-  type        String
+  typeName       String
   subTypeName String
   rating      Int?
   price       Decimal? @db.Decimal
@@ -165,5 +167,6 @@ model Task {
 
   Consumer User  @relation(name: "ConsumerTasks", fields: [consumerId], references: [id])
   Tasker   User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id])
-  SubType TaskSubTypes @relation(fields: [subTypeName, type], references: [name, taskTypeName])
+  SubType TaskSubTypes @relation(fields: [subTypeName, typeName], references: [name, taskTypeName])
+  TypeName TaskType @relation(fields: [typeName], references: [name])
 }
