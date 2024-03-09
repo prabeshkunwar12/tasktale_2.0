@@ -27,8 +27,16 @@ export const RegisterSchema = z.object({
 
 export const ResetSchema = z.object({
     email: z.string().min(1, "email is required").email(),
-});
+})
 
 export const NewPasswordSchema = z.object({
     password: passwordSchema,
+})
+
+export const NewTaskSchema = z.object({
+    description: z.string().min(1, "Description is Required").min(10, "Description is not enough."),
+    typeName: z.string(),
+    subTypeName: z.string({required_error: "Please Select Task Type:"}),
+    location: z.string().min(1, "Location is required"),
+    taskDateTime: z.date(),
 })

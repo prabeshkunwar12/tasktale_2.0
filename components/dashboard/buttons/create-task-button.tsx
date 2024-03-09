@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import React, { useState } from 'react'
+import SubmitForm from '../forms/submit_from'
 
 const CreateTaskButton = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -14,7 +15,7 @@ const CreateTaskButton = () => {
             </DialogTrigger>
 
             <DialogContent>
-                example content
+                <SubmitForm />
             </DialogContent>
         </Dialog>
     )
