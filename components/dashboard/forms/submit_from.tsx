@@ -4,7 +4,9 @@ import { trpc } from '@/app/_trpc/client'
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { NewTaskFormSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -29,14 +31,9 @@ const SubmitForm = () => {
 
     const form = useForm<z.infer<typeof NewTaskFormSchema>>({
         resolver: zodResolver(NewTaskFormSchema),
-        defaultValues: {
-            description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error, vero mollitia non ipsum quia nostrum itaque vitae vel repellendus maxime modi in incidunt magnam. Consequatur consequuntur eius necessitatibus vitae earum.",
-            taskDateTime: new Date().toISOString(),
-            location: "Charlottetown, PE, CA"
-        }
     })
 
-    const { mutate:createTask } = trpc.createTask.useMutation({
+    const { mutate:createTask, isPending } = trpc.createTask.useMutation({
         onSuccess: (task) => {
             if(task) {
                 router.push(`dashboard/tasks/${task?.id}`)
@@ -54,6 +51,10 @@ const SubmitForm = () => {
     const onSubmit = (values: z.infer<typeof NewTaskFormSchema>, event?: React.BaseSyntheticEvent) => {
         event?.preventDefault(); 
         console.log(values);
+        //changing the date to UTC time 
+        values.taskDateTime = new Date(
+            new Date(values.taskDateTime).getTime() - new Date().getTimezoneOffset() * 60000
+        ).toISOString();
         createTask(values);
     };
     
@@ -79,6 +80,7 @@ const SubmitForm = () => {
                                     <FormControl>
                                         <Button 
                                             variant="outline" 
+                                            disabled={isPending}
                                             className={cn
                                                 ("w-[200px] justify-between",
                                                 !field.value && "text-muted-foreground",
@@ -120,6 +122,55 @@ const SubmitForm = () => {
                                     </Command>
                                 </PopoverContent>
                             </Popover>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field })=>(
+                        <FormItem className='flex flex-col mt-3 space-y-2'>
+                            <FormControl>
+                                <Textarea 
+                                    {...field}
+                                    placeholder='Enter your description here...'
+                                    disabled={isPending}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field })=>(
+                        <FormItem className='flex flex-col mt-3 space-y-2'>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    placeholder='Enter your address...'
+                                    disabled={isPending}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="taskDateTime"
+                    render={({ field })=>(
+                        <FormItem className='flex flex-col mt-3 space-y-2'>
+                            <FormControl>
+                                <Input
+                                    {...field}
+                                    placeholder={new Date().toISOString()}
+                                    disabled={isPending}
+                                    type='datetime-local'
+                                />
+                            </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}

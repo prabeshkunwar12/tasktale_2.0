@@ -5,7 +5,7 @@ import { buttonVariants } from "../ui/button"
 export const BookNowButton = () => {
     return (
         <Link
-            href='./dashboard'
+            href='/dashboard'
             className={buttonVariants({
                 size: 'sm',
             })}>
@@ -17,7 +17,7 @@ export const BookNowButton = () => {
 export const GetStartedButton = () => {
     return (
         <Link
-            href='./dashboard'
+            href='/dashboard'
             className={buttonVariants({
                 size: 'sm',
             })}>
@@ -29,7 +29,7 @@ export const GetStartedButton = () => {
 export const TasksButton = () => {
     return (
         <Link
-            href='./dashboard'
+            href='/dashboard'
             className={buttonVariants({
                 size: 'sm',
                 variant: "ghost"

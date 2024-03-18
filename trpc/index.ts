@@ -52,7 +52,6 @@ export const appRouter = router({
     const { description, subTypeName, location, taskDateTime } = input
 
     const typeName = await getTaskBySubTask(subTypeName)
-    console.log(description)
 
     if(!typeName) {
       return null
@@ -64,11 +63,11 @@ export const appRouter = router({
         typeName,
         subTypeName,
         location,
+        status:$Enums.TaskStatus.POSTED,
         consumerId:userId,
-        taskDateTime
+        taskDateTime:taskDateTime
       }
     })
-    console.log("New task: ", task)
     return task
   })
 
