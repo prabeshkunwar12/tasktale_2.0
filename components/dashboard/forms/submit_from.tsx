@@ -6,7 +6,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import { NewTaskSchema } from '@/schemas'
+import { NewTaskFormSchema } from '@/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -14,8 +14,6 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Skeleton from 'react-loading-skeleton'
 import * as z from 'zod'
-
-
 
 const SubmitForm = () => {
     const [error, setError] = useState("")
@@ -29,25 +27,36 @@ const SubmitForm = () => {
         if(data) setSubTypeList(data)
     }, [data])
 
-    const form = useForm<z.infer<typeof NewTaskSchema>>({
-        resolver: zodResolver(NewTaskSchema),
+    const form = useForm<z.infer<typeof NewTaskFormSchema>>({
+        resolver: zodResolver(NewTaskFormSchema),
+        defaultValues: {
+            description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error, vero mollitia non ipsum quia nostrum itaque vitae vel repellendus maxime modi in incidunt magnam. Consequatur consequuntur eius necessitatibus vitae earum.",
+            taskDateTime: new Date().toISOString(),
+            location: "Charlottetown, PE, CA"
+        }
     })
 
-    const onSubmit = () => {
-        setError("")
-        
-    }
-    const { mutate:createTask, isPending } = trpc.createTask.useMutation({
+    const { mutate:createTask } = trpc.createTask.useMutation({
         onSuccess: (task) => {
-            if(task) router.push(`dashboard/tasks/${task?.id}`)
+            if(task) {
+                router.push(`dashboard/tasks/${task?.id}`)
+            }
             else setError("Task Type Not Found")
+            form.reset()
         },
-
-        onError: () => {
+        onError: (error) => {
             setError("Failed to Create Task")
+            console.log(error.message)
             form.reset()
         }
     })
+
+    const onSubmit = (values: z.infer<typeof NewTaskFormSchema>, event?: React.BaseSyntheticEvent) => {
+        event?.preventDefault(); 
+        console.log(values);
+        createTask(values);
+    };
+    
 
     if(!subTypeList) {
         return (
@@ -57,7 +66,9 @@ const SubmitForm = () => {
 
     return (
         <Form {...form}>
-            <form onSubmit={} className='flex flex-col space-y-4'>
+            <form onSubmit={form.handleSubmit(onSubmit)}
+                className='flex flex-col space-y-4'
+            >
                 <FormField
                     control={form.control}
                     name="subTypeName"

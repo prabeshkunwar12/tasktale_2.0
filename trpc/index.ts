@@ -3,18 +3,18 @@ import { privateProcedure, publicProcedure, router } from './trpc';
 import * as z from 'zod'
 import { TRPCError } from '@trpc/server';
 import { $Enums } from '@prisma/client';
-import { NewTaskSchema } from '@/schemas';
+import { NewTaskFormSchema } from '@/schemas';
 import db from '@/lib/db';
  
 export const appRouter = router({
 
   getConsumerTasks: privateProcedure.query(({ctx}) =>{
-    const {user, userId} = ctx
+    const {userId} = ctx
     return getTasksByConsumerId(userId)
   }),
 
   getTaskerTasks: privateProcedure.query(({ctx}) =>{
-    const {user, userId} = ctx
+    const {userId} = ctx
     return getTasksByTaskerId(userId)
   }),
 
@@ -47,11 +47,12 @@ export const appRouter = router({
     return subTypes
   }),
 
-  createTask: privateProcedure.input(NewTaskSchema).mutation(async ({ctx, input})=> {
+  createTask: privateProcedure.input(NewTaskFormSchema).mutation(async ({ctx, input})=> {
     const { userId } = ctx
     const { description, subTypeName, location, taskDateTime } = input
 
     const typeName = await getTaskBySubTask(subTypeName)
+    console.log(description)
 
     if(!typeName) {
       return null
@@ -67,7 +68,7 @@ export const appRouter = router({
         taskDateTime
       }
     })
-
+    console.log("New task: ", task)
     return task
   })
 
