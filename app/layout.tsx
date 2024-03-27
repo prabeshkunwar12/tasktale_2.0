@@ -5,6 +5,10 @@ import { cn } from "@/lib/utils"
 import Navbar from "@/components/navbar/navbar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import Providers from "@/components/providers";
+import { Analytics } from "@vercel/analytics/react"
+
+import "react-loading-skeleton/dist/skeleton.css" 
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +24,17 @@ export default async function RootLayout({
 }>) {
   const session = await auth()
   return (
+    // SessionProvider wraps Providers
     <SessionProvider>
-      <html lang="en" className="light">
-        <body className={cn('min-h-screen font-sans antialiased grainy', inter.className)}>
-          <Navbar />
-          {children}
-        </body>
-      </html>
+      <Providers>
+        <html lang="en" className="light">
+          <body className={cn('min-h-screen font-sans antialiased grainy', inter.className)}>
+            <Navbar />
+            {children}
+            <Analytics />
+          </body>
+        </html>
+      </Providers>
     </SessionProvider>
   );
 }

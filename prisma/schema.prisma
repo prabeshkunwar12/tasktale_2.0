@@ -7,17 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// datasource db {
+//   provider = "postgresql"
+//   url = env("DATABASE_PRISMA_URL") // uses connection pooling
+//   directUrl = env("DATABASE_URL_NON_POOLING") // uses a direct connection
+// }
+
 model User {
-  id                    String                 @id @default(cuid())
-  name                  String?
-  email                 String?                @unique
-  emailVerified         DateTime?
-  image                 String?
-  password              String?
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+
   role                  UserRole               @default(USER)
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+
+  consumerTasks Task[] @relation("ConsumerTasks")
+  taskerTasks   Task[] @relation("TaskerTasks")
 }
 
 enum UserRole {
@@ -73,9 +83,90 @@ model TwoFactorToken {
 }
 
 model TwoFactorConfirmation {
-  id      String   @id @default(cuid())
-  userId  String
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+enum UploadStatus {
+  PENDING
+  PROCESSING
+  FAILED
+  SUCCESS
+}
+
+model TaskImage {
+  id     String @id @default(cuid())
+  name   String
+  taskId String
+
+  uploadStatus UploadStatus @default(PENDING)
+
+  url String
+  key String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Task Task @relation(fields: [taskId], references: [id])
+}
+
+enum TaskStatus {
+  SUBMITTING
+  POSTED
+  FAILED
+  ACCPTED
+  PAID
+  COMPLETED
+  RATED
+}
+
+model TaskSubTypes {
+  name         String
+  taskTypeName String
+  taskType TaskType @relation(fields: [taskTypeName], references: [name])
+  tasks Task[]
+
+  @@unique([name, taskTypeName])
+}
+
+model TaskType {
+  name     String
+  subTypes TaskSubTypes[]
+  task Task[]
+
+  @@unique([name])
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  description String
+  typeName       String
+  subTypeName String
+  rating      Int?
+  price       Decimal? @db.Decimal
+  location    String?
+
+  consumerId String
+  taskerId   String?
+
+  images TaskImage[]
+
+  status TaskStatus @default(SUBMITTING)
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  taskDateTime      DateTime?
+  postedDateTime    DateTime?
+  acceptedDateTime  DateTime?
+  paidDateTime      DateTime?
+  completedDateTime DateTime?
+  ratedDateTime     DateTime?
+
+  Consumer User  @relation(name: "ConsumerTasks", fields: [consumerId], references: [id])
+  Tasker   User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id])
+  SubType TaskSubTypes @relation(fields: [subTypeName, typeName], references: [name, taskTypeName])
+  TypeName TaskType @relation(fields: [typeName], references: [name])
 }

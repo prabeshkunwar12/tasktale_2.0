@@ -31,6 +31,8 @@ export const authRoutes = [
  */
 export const apiAuthPrefix = "/api/auth"
 
+export const trpcApiPrefix = "/api/trpc"
+
 /**
  * The default direct path after logging in
  * @type {string}
