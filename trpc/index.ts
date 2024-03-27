@@ -57,6 +57,10 @@ export const appRouter = router({
       return null
     }
 
+    if(new Date()>new Date(taskDateTime)) {
+      throw new Error('Date and time submitted is before the current date')
+    }
+
     const task = await db.task.create({
       data: {
         description,

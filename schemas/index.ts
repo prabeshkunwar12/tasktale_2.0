@@ -41,8 +41,8 @@ export const NewTaskSchema = z.object({
     taskDateTime: z.date(),
 })
 export const NewTaskFormSchema = z.object({
-    description: z.string().min(1, "Description is Required").min(10, "Description is not enough."),
-    subTypeName: z.string({required_error: "Please Select Task Type:"}),
-    location: z.string().min(1, "Location is required"),
-    taskDateTime: z.string(),
+    description: z.string({required_error: "Description is Required..."}).min(10, "Description is not enough."),
+    subTypeName: z.string({required_error: "Please Select Task Type"}),
+    location: z.string({required_error: "Address is required..."}).min(1, "Location is required"),
+    taskDateTime: z.string({required_error: "Time and date is required..."}),
 })

@@ -1,6 +1,7 @@
 "use client"
 
 import { trpc } from '@/app/_trpc/client'
+import { FormError, FormSuccess } from '@/components/auth/forms/info'
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
@@ -19,6 +20,7 @@ import * as z from 'zod'
 
 const SubmitForm = () => {
     const [error, setError] = useState("")
+    const [success, setSuccess] = useState("")
     const [open, setOpen] = React.useState(false)
     const [subTypeList, setSubTypeList] = useState<{ name: string, taskTypeName: string }[]>([])
     const router = useRouter()
@@ -36,13 +38,14 @@ const SubmitForm = () => {
     const { mutate:createTask, isPending } = trpc.createTask.useMutation({
         onSuccess: (task) => {
             if(task) {
+                setSuccess("Task successfully created")
                 router.push(`dashboard/tasks/${task?.id}`)
             }
             else setError("Task Type Not Found")
             form.reset()
         },
         onError: (error) => {
-            setError("Failed to Create Task")
+            setError(error.message)
             console.log(error.message)
             form.reset()
         }
@@ -68,7 +71,7 @@ const SubmitForm = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}
-                className='flex flex-col space-y-4'
+                className='flex flex-col space-y-10'
             >
                 <FormField
                     control={form.control}
@@ -82,7 +85,7 @@ const SubmitForm = () => {
                                             variant="outline" 
                                             disabled={isPending}
                                             className={cn
-                                                ("w-[200px] justify-between",
+                                                ("w-full justify-between",
                                                 !field.value && "text-muted-foreground",
                                             )}
                                         >
@@ -169,12 +172,15 @@ const SubmitForm = () => {
                                     placeholder={new Date().toISOString()}
                                     disabled={isPending}
                                     type='datetime-local'
+                                    className={!field.value ? 'text-muted-foreground':' text-secondary-foreground'}
                                 />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+                <FormSuccess message={success} />
+                <FormError message={error} />
                 <Button type='submit'>Submit</Button>
             </form>
         </Form>

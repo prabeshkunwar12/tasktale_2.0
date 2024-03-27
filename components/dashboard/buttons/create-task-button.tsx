@@ -14,7 +14,7 @@ const CreateTaskButton = () => {
                 <Button>Book a New Task</Button>
             </DialogTrigger>
 
-            <DialogContent>
+            <DialogContent className=' z-50 sm:w-full md:w-[1000px] w-[1000px]'>
                 <SubmitForm />
             </DialogContent>
         </Dialog>
