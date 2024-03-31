@@ -1,4 +1,4 @@
-'use sever'
+'use server'
 
 import { currentUser } from '@/lib/current-user'
 import { getUserByEmail, getUserById } from '@/lib/data/user'
