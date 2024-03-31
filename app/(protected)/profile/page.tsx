@@ -1,9 +1,13 @@
+import { Cloud } from '@/components/design'
 import ProfileForm from '@/components/profile/profile-form'
-import React from 'react'
 
 const ProfilePage = () => {
   return (
-    <ProfileForm />
+    <div className='relative isolate'>
+        <Cloud />
+        <ProfileForm />
+        <Cloud />
+    </div>
   )
 }
 

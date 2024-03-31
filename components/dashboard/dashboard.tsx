@@ -10,7 +10,7 @@ const Dashboard = () => {
                 <CreateTaskButton />    
             </div>
 
-            <div className='relative'>
+            <div className='relative isolate'>
                 <div
                     aria-hidden='true'
                     className='pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80'>
