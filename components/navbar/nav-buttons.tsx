@@ -4,7 +4,6 @@ import React from 'react'
 import { AvatarButton, BookNowButton, TasksButton } from './buttons'
 import {LoginButton} from '../auth/buttons/login-button'
 import { useCurrrentUser } from '@/lib/hooks/use-current-user'
-import LogoutButton from '../auth/buttons/logout-button'
 
 const NavButtons = () => {
     const currentUser = useCurrrentUser()
