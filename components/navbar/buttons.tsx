@@ -1,6 +1,10 @@
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
-import { buttonVariants } from "../ui/button"
+import { ArrowRight, UserCircle } from "lucide-react"
+import { Button, buttonVariants } from "../ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { useCurrrentUser } from "@/lib/hooks/use-current-user"
+import LogoutButton from "../auth/buttons/logout-button"
 
 export const BookNowButton = () => {
     return (
@@ -37,4 +41,41 @@ export const TasksButton = () => {
             Tasks 
         </Link>
     )
-} 
+}
+
+export const ProfileButton = () => {
+    return (
+        <Link
+            href='/profile'
+            className={buttonVariants({
+                size: 'sm',
+                variant: "ghost"
+            })}>
+            Profile
+        </Link>
+    )
+}
+
+export const AvatarButton = () => {
+    const user = useCurrrentUser()
+    const image = user?.image
+    return (
+        <Popover>
+            <PopoverTrigger>
+                <Button variant="ghost">
+                    <Avatar className=" items-center justify-center">
+                        {image ? (
+                            <AvatarImage src={image} />
+                        ):(
+                            <UserCircle className="text-center" />
+                        )}
+                    </Avatar>
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className=" flex flex-col items-center justify-center w-min">
+                <ProfileButton />
+                <LogoutButton />
+            </PopoverContent>
+        </Popover>
+    )
+}

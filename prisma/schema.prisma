@@ -165,8 +165,8 @@ model Task {
   completedDateTime DateTime?
   ratedDateTime     DateTime?
 
-  Consumer User  @relation(name: "ConsumerTasks", fields: [consumerId], references: [id])
-  Tasker   User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id])
+  Consumer User  @relation(name: "ConsumerTasks", fields: [consumerId], references: [id], onDelete: Cascade)
+  Tasker   User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id], onDelete: Cascade)
   SubType TaskSubTypes @relation(fields: [subTypeName, typeName], references: [name, taskTypeName])
   TypeName TaskType @relation(fields: [typeName], references: [name])
 }
