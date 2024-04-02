@@ -1,9 +1,7 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { User } from 'lucide-react'
-import { ProfileImageUploadButton } from './buttons';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-import { Button } from '../ui/button';
 
 interface ProfileImageProps {
     image?: string|null; 

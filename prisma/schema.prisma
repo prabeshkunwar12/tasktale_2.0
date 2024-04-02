@@ -26,14 +26,30 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 
-  consumerTasks Task[] @relation("ConsumerTasks")
-  taskerTasks   Task[] @relation("TaskerTasks")
+  ProfileImage  ProfileImage?
+  consumerTasks Task[]        @relation("ConsumerTasks")
+  taskerTasks   Task[]        @relation("TaskerTasks")
 }
 
 enum UserRole {
   ADMIN
   USER
   TASKER
+}
+
+model ProfileImage {
+  id           String       @id @default(cuid())
+  userId       String       @unique
+  name         String
+  uploadStatus UploadStatus @default(PENDING)
+
+  url String
+  key String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User User @relation(fields: [userId], references: [id])
 }
 
 model Account {
@@ -126,8 +142,8 @@ enum TaskStatus {
 model TaskSubTypes {
   name         String
   taskTypeName String
-  taskType TaskType @relation(fields: [taskTypeName], references: [name])
-  tasks Task[]
+  taskType     TaskType @relation(fields: [taskTypeName], references: [name])
+  tasks        Task[]
 
   @@unique([name, taskTypeName])
 }
@@ -135,7 +151,7 @@ model TaskSubTypes {
 model TaskType {
   name     String
   subTypes TaskSubTypes[]
-  task Task[]
+  task     Task[]
 
   @@unique([name])
 }
@@ -143,7 +159,7 @@ model TaskType {
 model Task {
   id          String   @id @default(cuid())
   description String
-  typeName       String
+  typeName    String
   subTypeName String
   rating      Int?
   price       Decimal? @db.Decimal
@@ -165,8 +181,8 @@ model Task {
   completedDateTime DateTime?
   ratedDateTime     DateTime?
 
-  Consumer User  @relation(name: "ConsumerTasks", fields: [consumerId], references: [id], onDelete: Cascade)
-  Tasker   User? @relation(name: "TaskerTasks", fields: [taskerId], references: [id], onDelete: Cascade)
-  SubType TaskSubTypes @relation(fields: [subTypeName, typeName], references: [name, taskTypeName])
-  TypeName TaskType @relation(fields: [typeName], references: [name])
+  Consumer User         @relation(name: "ConsumerTasks", fields: [consumerId], references: [id], onDelete: Cascade)
+  Tasker   User?        @relation(name: "TaskerTasks", fields: [taskerId], references: [id], onDelete: Cascade)
+  SubType  TaskSubTypes @relation(fields: [subTypeName, typeName], references: [name, taskTypeName])
+  TypeName TaskType     @relation(fields: [typeName], references: [name])
 }
