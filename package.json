@@ -38,6 +38,7 @@
     "next-auth": "5.0.0-beta.9",
     "react": "^18.2.0",
     "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.50.1",
     "react-icons": "^5.0.1",
     "react-loading-skeleton": "^3.4.0",
