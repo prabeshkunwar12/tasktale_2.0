@@ -61,7 +61,7 @@ export const AvatarButton = () => {
     const image = user?.image
     return (
         <Popover>
-            <PopoverTrigger>
+            <PopoverTrigger asChild>
                 <Button variant="ghost">
                     <Avatar className=" items-center justify-center">
                         {image ? (
