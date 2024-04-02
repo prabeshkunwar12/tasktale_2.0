@@ -1,7 +1,9 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import Image from 'next/image'
 import { User } from 'lucide-react'
+import { ProfileImageUploadButton } from './buttons';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
+import { Button } from '../ui/button';
 
 interface ProfileImageProps {
     image?: string|null; 
@@ -9,17 +11,22 @@ interface ProfileImageProps {
 
 const ProfileImage: React.FC<ProfileImageProps> = ({ image }) => {
     return (
-        <div className='w-full mb-10'>
-            <Avatar className=' w-20 h-20 mx-auto '>
-                {image ? (
-                    <AvatarImage src={image} />
-                ) : (
-                    <AvatarFallback>
-                        <User className=' h-full w-full' />
-                    </AvatarFallback>
-                )}
-            </Avatar>
-        </div>
+        <Dialog>
+            <DialogTrigger>
+                <Avatar className=' w-20 h-20 mx-auto'>
+                    {image ? (
+                        <AvatarImage src={image} />
+                    ) : (
+                        <AvatarFallback>
+                            <User className=' h-full w-full' />
+                        </AvatarFallback>
+                    )}
+                </Avatar>
+            </DialogTrigger>
+            <DialogContent>
+                Upload Your Profile picture.
+            </DialogContent>
+        </Dialog>
     )
 }
 
