@@ -1,10 +1,13 @@
 'use client'
 import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { Cloud, File, User } from 'lucide-react'
+import { Cloud, User } from 'lucide-react'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import Dropzone from "react-dropzone"
 import { Progress } from '../ui/progress';
+import { useUploadThing } from '@/lib/hooks/uploadThing';
+import { toast } from "sonner"
+import { trpc } from '@/app/_trpc/client';
 
 interface ProfileImageProps {
     image?: string|null; 
@@ -12,25 +15,46 @@ interface ProfileImageProps {
 
 const ProfileImageDropzone = () => {
     const [isUploading, setIsUploading] = useState<boolean | null>(false);
-    const [uploadedImage, setUploadedImage] = useState<string | ArrayBuffer | null>(null);
+    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
-    const handleDrop = (acceptedFiles) => {
-        // Assuming only one file is uploaded
+    const { startUpload } = useUploadThing("imageUploader")
+
+    const { mutate:startPolling } = trpc.getFile.useMutation({
+        onSuccess: () => {
+            toast.success("image uploaded")
+        },
+        retry: true,
+        retryDelay: 500
+    })
+
+    const handleDrop = async (acceptedFiles:File[]) => {
         const file = acceptedFiles[0];
-
         setIsUploading(true);
 
-        // Create a FileReader instance
         const reader = new FileReader();
-
-        // Define what happens once the file is read
         reader.onload = () => {
             setIsUploading(false);
-            setUploadedImage(reader.result);
+            setUploadedImage(reader.result as string);
         };
-
-        // Read the file as a data URL
         reader.readAsDataURL(file);
+
+        const res = await startUpload(acceptedFiles)
+        
+        if(!res) {
+            return toast.error("Something went wrong", {
+                description: "Please try again later",
+            })
+        }
+
+        const [fileResponse] = res
+        const key = fileResponse?.key
+        if(!key) {
+            return toast.error("Something went wrong", {
+                description: "Please try again later",
+            })
+        }
+
+        startPolling({ key })
     };
 
     return (
@@ -52,7 +76,7 @@ const ProfileImageDropzone = () => {
                                     </div>
                                 </label>
                             </div>
-                        )}
+                        )} 
 
                         {isUploading && (
                             <div className='absolute inset-0 flex items-center justify-center'>
@@ -64,6 +88,8 @@ const ProfileImageDropzone = () => {
                                 </div>
                             </div>
                         )}
+
+                        <input {...getInputProps} type='file' id='dropzone-file' className='hidden' />
                     </div>
                 </div> 
             )}

@@ -9,6 +9,7 @@ import Providers from "@/components/providers";
 import { Analytics } from "@vercel/analytics/react"
 
 import "react-loading-skeleton/dist/skeleton.css" 
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default async function RootLayout({
             <Navbar />
             {children}
             <Analytics />
+            <Toaster />
           </body>
         </html>
       </Providers>
