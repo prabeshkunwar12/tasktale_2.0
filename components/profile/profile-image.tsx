@@ -31,6 +31,8 @@ const ProfileImageDropzone = () => {
         const file = acceptedFiles[0];
         setIsUploading(true);
 
+        toast.info("uploading")
+
         const reader = new FileReader();
         reader.onload = () => {
             setIsUploading(false);

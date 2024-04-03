@@ -33,6 +33,8 @@ export const apiAuthPrefix = "/api/auth"
 
 export const trpcApiPrefix = "/api/trpc"
 
+export const uploadthingApiPrefix = "/api/uploadthing"
+
 /**
  * The default direct path after logging in
  * @type {string}
