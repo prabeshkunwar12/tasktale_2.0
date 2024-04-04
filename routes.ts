@@ -25,15 +25,11 @@ export const authRoutes = [
 ]
 
 /**
- * the prefix for api authentication routes
- * Thes routes that start with prefix are used for api authentication purposes
+ * the prefix for api  routes
+ * Thes routes that start with prefix are used for api purposes
  * @type {String}
  */
-export const apiAuthPrefix = "/api/auth"
-
-export const trpcApiPrefix = "/api/trpc"
-
-export const uploadthingApiPrefix = "/api/uploadthing"
+export const apiPrefix = "/api"
 
 /**
  * The default direct path after logging in

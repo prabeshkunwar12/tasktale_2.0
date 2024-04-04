@@ -1,6 +1,6 @@
 import authConfig from "@/auth.config"
 import NextAuth from "next-auth"
-import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefix, authRoutes, publicRoutes, trpcApiPrefix, uploadthingApiPrefix } from "./routes";
+import { DEFAULT_LOGIN_REDIRECT, apiPrefix, authRoutes, publicRoutes } from "./routes";
 
 const { auth } = NextAuth(authConfig)
 
@@ -8,13 +8,11 @@ export default auth((req) => {
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth;
 
-    const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-    const isTrpcApiRoute = nextUrl.pathname.startsWith(trpcApiPrefix);
-    const isUploadthingApiRoute = nextUrl.pathname.startsWith(uploadthingApiPrefix);
+    const isApiRoute = nextUrl.pathname.startsWith(apiPrefix);
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    if (isApiAuthRoute || isTrpcApiRoute || isUploadthingApiRoute) {
+    if (isApiRoute) {
         return;
     }
 
