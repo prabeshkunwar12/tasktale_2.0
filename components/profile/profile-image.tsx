@@ -24,10 +24,16 @@ const ProfileImageDropzone = () => {
 
     const { mutate:startPolling } = trpc.getFile.useMutation({
         onSuccess: (file) => {
-            console.log("file uploaded")
+            toast.success("Image uploaded", {
+                description: "Profile picture changed"
+            })
+            window.location.reload()
         },
         onError: (error) => {
-            console.log(error.message)
+            toast.error("Something went wrong", {
+                description: "Please try again later"
+            })
+            router.push("/profile")
         },
         retry: true,
         retryDelay: 500,
@@ -113,7 +119,7 @@ const ProfileImageDropzone = () => {
                                 {uploadProgress === 100 ? (
                                     <div className='flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2'>
                                     <Loader2 className='h-3 w-3 animate-spin' />
-                                    Redirecting...
+                                        Redirecting...
                                     </div>
                                 ) : null}
                                 </div>

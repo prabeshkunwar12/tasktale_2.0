@@ -9,24 +9,18 @@ export const ourFileRouter = {
     .middleware(async ({ req }) => {
       const user = await currentUser()
       if(!user || !user.id) throw new Error('Unauthorized')
-      console.log("I am running")
       return { userId: user.id};
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log("I am running")
-      try {
-        const createdFile = await db.profileImage.create({
-          data: {
-            key: file.key,
-            name: file.name,
-            userId: metadata.userId,
-            url: `${uploadUrl}/${file.key}`,
-            uploadStatus: "PROCESSING"
-          }
-        })
-      } catch {
-        throw new Error('database creation problem')
-      }
+      const createdFile = await db.profileImage.create({
+        data: {
+          key: file.key,
+          name: file.name,
+          userId: metadata.userId,
+          url: `${uploadUrl}/${file.key}`,
+          uploadStatus: "PROCESSING"
+        }
+      })
     })
 } satisfies FileRouter;
  
