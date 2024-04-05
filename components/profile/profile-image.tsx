@@ -5,10 +5,10 @@ import { Cloud, File, Loader2, User } from 'lucide-react'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import Dropzone from "react-dropzone"
 import { Progress } from '../ui/progress';
-import { useUploadThing } from '../../lib/hooks/uploadthing';
 import { toast } from "sonner"
 import { trpc } from '../../app/_trpc/client';
 import { useRouter } from 'next/navigation';
+import { useUploadThing } from '@/lib/hooks/uploadthing';
 
 const ProfileImageDropzone = () => {
 
@@ -89,7 +89,7 @@ const ProfileImageDropzone = () => {
                                     <span className='font-semibold'>Click to upload</span>{' '}or drag and drop
                                 </p>
                                 <p className='text-xs text-zinc-500'>
-                                    Image up to  "4" MB
+                                    Image up to &quot;4&quot; MB
                                 </p>
                             </div>
 
