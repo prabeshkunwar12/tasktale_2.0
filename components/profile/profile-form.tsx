@@ -61,7 +61,7 @@ const SettingsPage = () => {
     return ( 
         <Card className="mx-auto mt-20 w-[600px] max-w-7xl md:p-10 bg-white/50">
             <CardHeader>
-                <ProfileImage image={user.image} />
+                <ProfileImage />
             </CardHeader>
             <CardContent>
                 

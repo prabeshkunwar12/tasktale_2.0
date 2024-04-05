@@ -5,6 +5,7 @@ import { TRPCError } from '@trpc/server';
 import { $Enums } from '@prisma/client';
 import { NewTaskFormSchema } from '@/schemas';
 import db from '@/lib/db';
+import { getProfileImageUrl } from '@/lib/data/profileImage';
  
 export const appRouter = router({
 
@@ -88,6 +89,11 @@ export const appRouter = router({
 
     return image
   }),
+
+  getProfileImageUrl: privateProcedure.query( async ({ctx}) => {
+    const {userId} = ctx
+    return await getProfileImageUrl(userId)  
+  })
 
 });
 

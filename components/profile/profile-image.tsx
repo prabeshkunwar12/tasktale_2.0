@@ -9,11 +9,6 @@ import { useUploadThing } from '@/lib/hooks/uploadthing';
 import { toast } from "sonner"
 import { trpc } from '@/app/_trpc/client';
 import { useRouter } from 'next/navigation';
-import { error } from 'console';
-
-interface ProfileImageProps {
-    image?: string|null; 
-}
 
 const ProfileImageDropzone = () => {
 
@@ -135,16 +130,17 @@ const ProfileImageDropzone = () => {
 };
 
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ image }) => {
+const ProfileImage= () => {
+    const { data:image } = trpc.getProfileImageUrl.useQuery()
     return (
         <Dialog>
             <DialogTrigger>
-                <Avatar className=' w-20 h-20 mx-auto'>
+                <Avatar className='mx-auto h-20 w-20'>
                     {image ? (
-                        <AvatarImage src={image} />
+                        <AvatarImage src={image} className=' h-full w-auto' />
                     ) : (
                         <AvatarFallback>
-                            <User className=' h-full w-full' />
+                            <User className=' h-full w-auto' />
                         </AvatarFallback>
                     )}
                 </Avatar>
