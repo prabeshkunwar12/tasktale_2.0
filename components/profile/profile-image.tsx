@@ -5,9 +5,9 @@ import { Cloud, File, Loader2, User } from 'lucide-react'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import Dropzone from "react-dropzone"
 import { Progress } from '../ui/progress';
-import { useUploadThing } from '@/lib/hooks/uploadthing';
+import { useUploadThing } from '../../lib/hooks/uploadthing';
 import { toast } from "sonner"
-import { trpc } from '@/app/_trpc/client';
+import { trpc } from '../../app/_trpc/client';
 import { useRouter } from 'next/navigation';
 
 const ProfileImageDropzone = () => {
