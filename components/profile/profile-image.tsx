@@ -8,7 +8,11 @@ import { Progress } from '../ui/progress';
 import { toast } from "sonner"
 import { trpc } from '../../app/_trpc/client';
 import { useRouter } from 'next/navigation';
-import { useUploadThing } from '@/lib/hooks/uploadthing';
+import { generateReactHelpers } from '@uploadthing/react';
+import { OurFileRouter } from '@/app/api/uploadthing/core';
+
+const { useUploadThing } =
+  generateReactHelpers<OurFileRouter>();
 
 const ProfileImageDropzone = () => {
 
