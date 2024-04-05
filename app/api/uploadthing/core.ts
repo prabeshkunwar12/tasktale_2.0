@@ -1,6 +1,8 @@
 import { currentUser } from "@/lib/current-user";
+import { deleteProfileImage, getProfileImageKey } from "@/lib/data/profileImage";
 import db from "@/lib/db";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { UTApi } from "uploadthing/server";
  
 const f = createUploadthing();
 const uploadUrl = 'https://uploadthing-prod.s3.us-west-2.amazonaws.com' 
@@ -12,6 +14,14 @@ export const ourFileRouter = {
       return { userId: user.id};
     })
     .onUploadComplete(async ({ metadata, file }) => {
+      const imageKey = await getProfileImageKey(metadata.userId)
+      if(imageKey) {
+        //delete from database
+        await deleteProfileImage(metadata.userId)
+        //delete from cloud
+        const utapi = new UTApi()
+        await utapi.deleteFiles(imageKey)
+      }
       const createdFile = await db.profileImage.create({
         data: {
           key: file.key,
@@ -21,7 +31,7 @@ export const ourFileRouter = {
           uploadStatus: "PROCESSING"
         }
       })
-      console.info("UPLOADTHING: File added to database", createdFile)
+      console.info("UPLOADTHING: File added to database", createdFile.key)
     })
 } satisfies FileRouter;
  
