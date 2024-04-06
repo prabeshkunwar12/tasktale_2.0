@@ -5,6 +5,7 @@ import { TRPCError } from '@trpc/server';
 import { $Enums } from '@prisma/client';
 import { NewTaskFormSchema } from '@/schemas';
 import db from '@/lib/db';
+import { getProfileImageUrl } from '@/lib/data/profileImage';
  
 export const appRouter = router({
 
@@ -73,6 +74,25 @@ export const appRouter = router({
       }
     })
     return task
+  }),
+
+  getFile: privateProcedure.input(z.object({key:z.string()})).mutation(async ({ctx, input}) => {
+    const {userId} = ctx
+    const image = await db.profileImage.findFirst({
+      where: {
+        key: input.key,
+        userId
+      }
+    })
+
+    if(!image) throw new TRPCError({code : "NOT_FOUND"})
+
+    return image
+  }),
+
+  getProfileImageUrl: privateProcedure.query( async ({ctx}) => {
+    const {userId} = ctx
+    return await getProfileImageUrl(userId)  
   })
 
 });
