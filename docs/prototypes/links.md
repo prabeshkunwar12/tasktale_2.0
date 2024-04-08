@@ -1,1 +1,2 @@
 **Tasker Selection Page**: https://www.figma.com/proto/1htbtDM5IOYba3xZ6egAhF/Tasktale?type=design&node-id=1-2&t=C9KIHibxS5Qzszj7-1&scaling=min-zoom&page-id=0%3A1&mode=design
+**Tasker Registration Page:** https://www.figma.com/proto/1htbtDM5IOYba3xZ6egAhF/Tasktale?type=design&node-id=24-2&t=Ip9Twk92rHXEwH9R-1&scaling=min-zoom&page-id=0%3A1&mode=design
